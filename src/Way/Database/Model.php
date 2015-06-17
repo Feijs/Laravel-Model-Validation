@@ -95,5 +95,23 @@ class Model extends Eloquent {
     {
         return ! empty($this->errors);
     }
+    
+    /**
+     * Prepare the instance for serialization.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $this->validator = null;
+        return array_keys(get_object_vars($this));
+    }
 
+    /** 
+     * Reactivate the instance after deserialization 
+     */
+    public function __wakeup()
+    {
+        $this->validator = \App::make('validator');
+    }
 }
